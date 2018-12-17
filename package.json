@@ -1,6 +1,6 @@
 {
   "name": "react-mathjax3",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React component for MathJax with possibility of dynamic html rendering",
   "main": "./lib/index.js",
   "repository": {
