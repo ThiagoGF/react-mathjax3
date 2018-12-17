@@ -1,22 +1,58 @@
 # React MathJax
 
-[![npm version](https://badge.fury.io/js/react-mathjax2.svg)](https://badge.fury.io/js/react-mathjax2)
-
 React component to display math formulas written in AsciiMath or TeX.
 
 ![Example of usage](/example.gif)
 
 ## Install
 ```
-npm install react-mathjax2 --save
+npm install react-mathjax3 --save
 ```
 
 ## Usage
 
+# Dynamic rendering of HTML content with embedded math (the only plus in comparison to [react-mathjax](https://github.com/wko27/react-mathjax) from wko27)
+```jsx
+import MathJax from 'react-mathjax3'
+
+const html = '$\\sum\\limits_{i = 0}^n {i^2 } = \\frac{n(n + 1)(2n + 1)}{6}$<br>Have a good day!';
+
+module.exports = () => {
+    return (
+        <MathJax.Context
+            input='tex'
+            onLoad={ () => console.log("Loaded MathJax script!") }
+            onError={ (MathJax, error) => {
+                console.warn(error);
+                console.log("Encountered a MathJax error, re-attempting a typeset!");
+                MathJax.Hub.Queue(
+                  MathJax.Hub.Typeset()
+                );
+            } }
+            script="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js"
+            options={ {
+                messageStyle: 'none',
+                extensions: ['tex2jax.js'],
+                jax: ['input/TeX', 'output/HTML-CSS'],
+                tex2jax: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']],
+                    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                    processEscapes: true,
+                },
+                TeX: {
+                    extensions: ['AMSmath.js', 'AMSsymbols.js', 'noErrors.js', 'noUndefined.js']
+                }
+            } }
+        >
+            <MathJax.Html html={ html } />
+        </MathJax.Context>
+    );
+}
+```
 # Inline display of AsciiMath wrapped in delimiters
 
 ```jsx
-import MathJax from 'react-mathjax2'
+import MathJax from 'react-mathjax3'
 
 const ascii = 'U = 1/(R_(si) + sum_(i=1)^n(s_n/lambda_n) + R_(se))'
 const content = `This can be dynamic text (e.g. user-entered) text with ascii math embedded in $$ symbols like $$${ascii}$$`
@@ -50,7 +86,7 @@ module.exports = () => {
 # Inline display of AsciiMath without delimiters
 
 ```jsx
-import MathJax from 'react-mathjax2'
+import MathJax from 'react-mathjax3'
 
 const ascii = 'U = 1/(R_(si) + sum_(i=1)^n(s_n/lambda_n) + R_(se))'
 
@@ -70,7 +106,7 @@ module.exports = () => {
 # Block display of AsciiMath
 
 ```jsx
-import MathJax from 'react-mathjax2'
+import MathJax from 'react-mathjax3'
 
 const ascii = 'U = 1/(R_(si) + sum_(i=1)^n(s_n/lambda_n) + R_(se))'
 
@@ -90,7 +126,7 @@ module.exports = () => {
 # Inline display of LaTeX
 
 ```jsx
-import MathJax from 'react-mathjax2'
+import MathJax from 'react-mathjax3'
 
 const tex = `f(x) = \\int_{-\\infty}^\\infty\\hat f(\\xi)\\,e^{2 \\pi i \\xi x}\\,d\\xi`
 
@@ -110,7 +146,7 @@ module.exports = () => {
 # Block display of LaTeX
 
 ```jsx
-import MathJax from 'react-mathjax2'
+import MathJax from 'react-mathjax3'
 
 const tex = `f(x) = \\int_{-\\infty}^\\infty\\hat f(\\xi)\\,e^{2 \\pi i \\xi x}\\,d\\xi`
 
@@ -142,10 +178,10 @@ module.exports = () => {
 
 #### `delay` (Number)
 - Sets delay between updates.
-- Default: 0 (the main difference between this library and [react-mathjax](https://github.com/SamyPesse/react-mathjax) from SamyPesse)
+- Default: 0
 
 #### `options` (Object)
-- Sets [MathJax configuration](http://docs.mathjax.org/en/latest/options/index.html?highlight=hub.config#configuration-objects). 
+- Sets [MathJax configuration](http://docs.mathjax.org/en/latest/options/index.html?highlight=hub.config#configuration-objects).
 - Default: Official MathJax configuration
 
 #### `onLoad` (Function)
@@ -158,7 +194,7 @@ module.exports = () => {
 - Defaults to `false`, controls whether to disallow rendering of children components until the MathJax script has finished loading
 
 ## Acknowledgements
-- This project was forked from [MatejMazur](https://github.com/MatejMazur) ([react-mathjax](https://github.com/MatejMazur/react-mathjax)).
+- This project was forked from [wko27](https://github.com/wko27) ([react-mathjax](https://github.com/wko27/react-mathjax)).
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
